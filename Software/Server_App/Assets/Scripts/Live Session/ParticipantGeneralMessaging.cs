@@ -21,18 +21,16 @@ public class ParticipantGeneralMessaging
     public event System.Action<float> OnHeightReceived;
 
     //Objects to call into directly
-    ParticipantHeartRateStream hrStream;
     ParticipantIMUReceiver imuStream;
 
     bool imuStreaming = false;
 
-    public ParticipantGeneralMessaging(TcpClient tcpClient, ParticipantHeartRateStream hrStream, ParticipantIMUReceiver imuStream) // Not sure where user will input data, whether before or after
+    public ParticipantGeneralMessaging(TcpClient tcpClient, ParticipantIMUReceiver imuStream) // Not sure where user will input data, whether before or after
     {
         //DELETE THIS: 
         //MainThreadDispatcher.Instance.DispatchAction(() => imuStream.InitializeSkeleton(1.75f));
         //imuStream.InitializeConnection(4210);
 
-        this.hrStream = hrStream;
         this.imuStream = imuStream;
 
         this.tcpClient = tcpClient;
@@ -100,21 +98,9 @@ public class ParticipantGeneralMessaging
                 case GeneralMessageType.NAME_ENTERED:
                     MainThreadDispatcher.Instance.DispatchAction(() => OnNameReceived(message));
                     break;
-                case GeneralMessageType.AGE_ENETERED:
-                    int age = int.Parse(message);
-                    hrStream.SetMaxHR(age);
-                    break;
                 case GeneralMessageType.HEIGHT_ENTERED:
                     float height_m = float.Parse(message);
                     MainThreadDispatcher.Instance.DispatchAction(() => imuStream.InitializeSkeleton(height_m));
-                    break;
-                case GeneralMessageType.HEART_RATE:
-                    int hr = int.Parse(message);
-                    MainThreadDispatcher.Instance.DispatchAction(() => hrStream.ReceiveNewHR(hr));
-                    break;
-                case GeneralMessageType.HR_BASELINE:
-                    float baseline = float.Parse(message);
-                    hrStream.SetBaseline(baseline);
                     break;
                 case GeneralMessageType.IMU_CONFIG:
                     if (imuStreaming) return;

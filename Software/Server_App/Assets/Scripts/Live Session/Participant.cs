@@ -7,19 +7,14 @@ using UnityEngine.UI;
 public class Participant
 {
     private ParticipantGeneralMessaging generalMessanger;
-    private ParticipantHeartRateStream hrManager;
     private ParticipantIMUReceiver imuStream;
     private SkeletonManager skeletonManager;
-    public ParticipantVideoFeedStream videoFeedReceiver;
     private ParticipantUIManager uiManager;
 
     public int id;
     public string name;
 
     public event System.Action<string> OnNameReceived;
-
-    private StreamWriter hrWriter;
-    private StreamWriter exertionWriter;
 
     string userFolderPath = "";
     string userFolderPathRel = "";
@@ -29,21 +24,16 @@ public class Participant
     //
 
 
-    public Participant(TcpClient tcpClient, int id, ParticipantUIManager uiManager, ParticipantVideoFeedStream videoReceiver, SkeletonManager skeletonManager, Button calibrateButton) // Not sure where user will input data, whether before or after
+    public Participant(TcpClient tcpClient, int id, ParticipantUIManager uiManager, SkeletonManager skeletonManager, Button calibrateButton) // Not sure where user will input data, whether before or after
     {
         this.id = id;
 
         this.uiManager = uiManager;
-        this.videoFeedReceiver = videoReceiver;
         this.skeletonManager = skeletonManager;
-
-        hrManager = new ParticipantHeartRateStream();
-        hrManager.OnHeartRateReceived += SetHR;
-        hrManager.OnExertionReceived += SetExertion;
 
         imuStream = new ParticipantIMUReceiver(skeletonManager, calibrateButton);
 
-        generalMessanger = new ParticipantGeneralMessaging(tcpClient, hrManager, imuStream); //Eventually hr manager should run its own messaging thread
+        generalMessanger = new ParticipantGeneralMessaging(tcpClient, imuStream); //Eventually hr manager should run its own messaging thread
         generalMessanger.OnNameReceived += SetUserName;
 
         Action addUserTagMethod = () => ParticipantJoinListUIManager.Instance.AddNewUserTag(id);
@@ -67,15 +57,6 @@ public class Participant
     {
         SendMessage(GeneralMessageType.SESSION_END);
 
-        hrWriter?.Flush();
-        hrWriter?.Close();
-        hrWriter = null;
-
-        exertionWriter?.Flush();
-        exertionWriter?.Close();
-        exertionWriter = null;
-
-        videoFeedReceiver?.StopAndSaveVideoFeed();
         imuStream?.StopReceiving();
         skeletonManager?.StopBVHStreaming();
         generalMessanger?.KillParticipantMessanger();
@@ -83,7 +64,6 @@ public class Participant
 
     public void StartSession()
     {
-        videoFeedReceiver.Initialize();
     }
 
     public void StartRecording()
@@ -94,42 +74,11 @@ public class Participant
         userFolderPath = Path.Combine(SessionManager.sessionFolderPath, name);
         Directory.CreateDirectory(userFolderPath);
 
-        videoFeedReceiver.StartSavingStream(userFolderPathRel);
-
         // Create CSV file inside this folder
         string hrPath = Path.Combine(userFolderPath, "Heart_Rate.csv");
-
-        hrWriter = new StreamWriter(hrPath, append: false);
-        hrWriter.WriteLine("Timestamp,HeartRate");
-
-        // Create CSV file inside this folder
-        string exertionPath = Path.Combine(userFolderPath, "Exertion.csv");
-        exertionWriter = new StreamWriter(exertionPath, append: false);
-        exertionWriter.WriteLine("Timestamp,Exertion");
 
         // on StartRecording
         var bvhPath = Path.Combine(userFolderPath, "mocap.bvh");
         skeletonManager.StartBVHStreaming(bvhPath, 30f);
-    }
-
-    public void SetHR(int hr)
-    {
-        uiManager.SetHR(hr);
-        if (hrWriter != null)
-        {
-            string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            hrWriter.WriteLine($"{timestamp},{hr}");
-        }
-    }
-
-    public void SetExertion(float exertion)
-    {
-        uiManager.SetExertion(exertion);
-        if (exertionWriter != null)
-        {
-            float exertionClamped = Mathf.Clamp(exertion, 0f, 100f);
-            string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            exertionWriter.WriteLine($"{timestamp},{exertionClamped:F2}");
-        }
     }
 }

@@ -26,7 +26,6 @@ public class SessionManager : MonoBehaviour
 
     //This is temporary and should be spawned dynamically for multiple participants
     public ParticipantUIManager participantUIManager; 
-    public ParticipantVideoFeedStream participantVideoFeedReceiver;
     public SkeletonManager skeletonManager;
     public Button calibrateButton;
 
@@ -50,7 +49,7 @@ public class SessionManager : MonoBehaviour
         while(!sessionStarted)
         {
             TcpClient client = TcpServer.AcceptTcpClient();
-            Participant newParticipant = new Participant(client, numParticipants, participantUIManager, participantVideoFeedReceiver, skeletonManager, calibrateButton);
+            Participant newParticipant = new Participant(client, numParticipants, participantUIManager, skeletonManager, calibrateButton);
             newParticipant.OnNameReceived += SetParticipantName;
             participantDict[numParticipants] = newParticipant;
             numParticipants++;
