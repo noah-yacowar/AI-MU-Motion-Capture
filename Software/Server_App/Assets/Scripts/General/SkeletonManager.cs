@@ -235,7 +235,6 @@ public void DrawSkeleton(float height_m=1.75f)
                 accum -= captureDt;
             }
         }
-
     }
 
 }
