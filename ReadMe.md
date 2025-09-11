@@ -1,4 +1,4 @@
-# AI-MU Motion-Capture Project
+# The "AI-MU" Motion-Capture Project
 
 ESP8266 + BNO08x (080/085) based motion capture system that streams IMU data over Wi-Fi into Unity.  
 The ecosystem includes a **mobile app** for QR code–based pairing of IMU suits and servers, making setup fast and reliable. This was chosen especially for commercial use cases where multiple users will be using the system daily. Here, a simple fixed connection from the sensor directly to the server is not flexible enough for all workflows.
