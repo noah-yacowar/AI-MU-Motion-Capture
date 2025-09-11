@@ -1,39 +1,61 @@
-# Motion Capture System
+# AI-MU-Motion-Capture
 
-A modular motion capture platform that uses **custom ESP8266 + BNO080 IMU trackers** to stream real-time orientation data into a **Unity application**.  
-Designed for multi-participant sessions, the system supports calibration, live skeleton visualization, and data export for post-analysis.
+ESP8266 + BNO08x (080/085) based motion capture system that streams IMU data over Wi-Fi into Unity.  
+The Unity application performs real-time skeleton reconstruction, visualization, and recording, with the ability to export captured motion to **BVH** for animation workflows.
+
+---
+
+## 📸 Overview
+
+![Tracker Hardware](docs/images/tracker.jpg)  
+*Custom ESP8266 D1 Mini + BNO08x tracker module*
+
+![Unity UI](docs/images/unity_ui.png)  
+*Unity interface showing live skeleton and recording controls*
 
 ---
 
 ## ✨ Features
-- **Custom IMU Trackers**  
-  - ESP8266 (Wemos D1 Mini) with BNO080 sensor  
-  - Wi-Fi UDP streaming at 100 Hz  
-  - Calibration for mounting error and yaw alignment  
 
-- **Unity Application**  
-  - Manages multiple tracked participants  
-  - Real-time skeleton visualization with custom `SkeletonManager`  
-  - Session management: start, stop, calibrate  
-  - Export to **BVH** and **FBX** for use in Blender, Maya, etc.  
-
-- **Calibration Pipeline**  
-  - Baseline hip yaw alignment  
-  - Pitch/roll mounting error correction  
-  - Per-sensor calibration offsets stored and reapplied  
-
-- **Data Pipeline**  
-  - Live UDP reception from trackers  
-  - Per-participant IMU mapping to skeleton joints  
-  - BVH/FBX export for post-processing and animation pipelines  
+- **Low-cost IMU Trackers**: ESP8266 D1 Mini boards with BNO080/BNO085 IMUs.
+- **Wi-Fi Data Streaming**: Fast UDP packets (~100 Hz) from multiple trackers.
+- **Real-time Visualization**: Unity app reconstructs skeletons live.
+- **Calibration Tools**: Mounting error correction + baseline yaw alignment.
+- **Multi-Participant Support**: Capture multiple people simultaneously.
+- **Recording & Export**: Save sessions and export to **BVH** (for Blender, Unity, Maya, etc.).
 
 ---
 
-## 🛠 Hardware
-- **ESP8266 (Wemos D1 Mini)**  
-- **BNO080 / BNO085 IMU sensor**  
-- 3D-printed cases with adjustable mounting  
+## 📦 Hardware
+
+Each tracker is built from:
+
+- **ESP8266 D1 Mini (Wemos)**  
+- **BNO080 / BNO085 IMU sensor** (I²C connection)  
+- **Battery + charging module**  
+- 3D printed case (friction-fit lid for quick access)  
+
+📷 Example:  
+
+![3D Printed Case](docs/images/case.png)  
+*Friction-fit printed case for tracker module*
 
 ---
 
-## 📂 Project Structure
+## 🖥️ Software
+
+- **Firmware**: C++/Arduino code running on each D1 Mini, sending IMU quaternions via UDP.  
+- **Unity App**:  
+  - Receives tracker data  
+  - Maps IMUs to skeleton joints  
+  - Provides calibration tools  
+  - Records sessions and exports animations  
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/noah-yacowar/AI-MU-Motion-Capture.git
+cd AI-MU-Motion-Capture
