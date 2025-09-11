@@ -1,7 +1,7 @@
 # AI-MU-Motion-Capture
 
 ESP8266 + BNO08x (080/085) based motion capture system that streams IMU data over Wi-Fi into Unity.  
-The ecosystem includes a **mobile app** for QR code–based pairing of IMU suits and servers, making setup fast and reliable.  
+The ecosystem includes a **mobile app** for QR code–based pairing of IMU suits and servers, making setup fast and reliable. This was chosen especially for commercial use cases where multiple users will be using the system daily, where a simple fixed connection from the sensor directly to the server is not flexible enough for all workflows.
 The Unity application performs real-time skeleton reconstruction, visualization, and recording, with the ability to export captured motion to **BVH** for animation workflows.
 
 ---
