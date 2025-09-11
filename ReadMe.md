@@ -1,6 +1,7 @@
 # AI-MU-Motion-Capture
 
 ESP8266 + BNO08x (080/085) based motion capture system that streams IMU data over Wi-Fi into Unity.  
+The ecosystem includes a **mobile app** for QR code–based pairing of IMU suits and servers, making setup fast and reliable.  
 The Unity application performs real-time skeleton reconstruction, visualization, and recording, with the ability to export captured motion to **BVH** for animation workflows.
 
 ---
@@ -13,11 +14,15 @@ The Unity application performs real-time skeleton reconstruction, visualization,
 ![Unity UI](docs/images/unity_ui.png)  
 *Unity interface showing live skeleton and recording controls*
 
+![Mobile App](docs/images/mobile_app.png)  
+*Mobile app used to scan QR code of IMU suit and connect to server*
+
 ---
 
 ## ✨ Features
 
 - **Low-cost IMU Trackers**: ESP8266 D1 Mini boards with BNO080/BNO085 IMUs.
+- **Mobile App Integration**: Scan a QR code on the IMU suit to automatically configure and connect to the server.  
 - **Wi-Fi Data Streaming**: Fast UDP packets (~100 Hz) from multiple trackers.
 - **Real-time Visualization**: Unity app reconstructs skeletons live.
 - **Calibration Tools**: Mounting error correction + baseline yaw alignment.
@@ -45,6 +50,9 @@ Each tracker is built from:
 ## 🖥️ Software
 
 - **Firmware**: C++/Arduino code running on each D1 Mini, sending IMU quaternions via UDP.  
+- **Mobile App**:  
+  - Scans QR code on the IMU suit to register tracker IDs.  
+  - Connects suit to the Unity server automatically.  
 - **Unity App**:  
   - Receives tracker data  
   - Maps IMUs to skeleton joints  
