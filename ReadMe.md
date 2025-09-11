@@ -31,22 +31,6 @@ The Unity application performs real-time skeleton reconstruction, visualization,
 
 ---
 
-## 📦 Hardware
-
-Each tracker is built from:
-
-- **ESP8266 D1 Mini (Wemos)**  
-- **BNO080 / BNO085 IMU sensor** (I²C connection)  
-- **Battery + charging module**  
-- 3D printed case (friction-fit lid for quick access)  
-
-📷 Example:  
-
-![3D Printed Case](docs/images/case.png)  
-*Friction-fit printed case for tracker module*
-
----
-
 ## 🖥️ Software
 
 - **Firmware**: C++/Arduino code running on each D1 Mini, sending IMU quaternions via UDP.  
@@ -58,6 +42,25 @@ Each tracker is built from:
   - Maps IMUs to skeleton joints  
   - Provides calibration tools  
   - Records sessions and exports animations  
+
+---
+
+## 📦 Hardware
+
+Each tracker is built from:
+
+- **ESP8266 D1 Mini (Wemos)**  
+- **BNO080 / BNO085 IMU sensor** (I²C connection)  
+- **Battery + charging module**  
+- 3D printed case (friction-fit lid for quick access)  
+
+📷 Images:  
+
+![3D Printed Case](docs/images/case.png)  
+*Friction-fit printed case for tracker module*
+
+![PCB Layout](docs/images/PCB.png)  
+*PCB layout in Kicad*
 
 ---
 
